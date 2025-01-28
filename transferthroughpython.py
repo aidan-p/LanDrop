@@ -6,6 +6,10 @@ import threading
 import tkinter as tk
 from tkinter import filedialog
 import requests
+import ctypes
+
+# Hides Python from taskbar
+ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
 
 # Flask and upload setup
 app = Flask(__name__)
