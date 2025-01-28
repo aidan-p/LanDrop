@@ -65,6 +65,20 @@
             color: green;
         }
 
+        .file-list {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .file-list a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .file-list a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 20px;
@@ -79,19 +93,70 @@
 <body>
     <div class="container">
         <h1>Upload a File</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" required>
+        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data" onsubmit="handleFileUpload(event)">
+            <input type="file" name="file" id="fileInput" required>
             <button type="submit">Upload</button>
         </form>
         {% if request.args.get('message') %}
             <p class="message">{{ request.args.get('message') }}</p>
         {% endif %}
+        
+        <div class="file-list">
+            <h2>Uploaded Files</h2>
+            <ul id="fileList">
+                {% for filename in files %}
+                    <li><a href="{{ url_for('send_file', filename=filename) }}" target="_blank">{{ filename }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 
     <script>
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            document.body.classList.add('standalone');
+        function handleFileUpload(event) {
+            event.preventDefault();  // Prevent page refresh
+
+            const formData = new FormData(document.getElementById('uploadForm'));
+            const fileInput = document.getElementById('fileInput');
+            
+            if (fileInput.files.length === 0) return;
+
+            // Show a loading message or spinner here (optional)
+            const formDataObj = new FormData();
+            formDataObj.append('file', fileInput.files[0]);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formDataObj
+            })
+            .then(response => response.json())  // assuming Flask will return JSON
+            .then(data => {
+                if (data.success) {
+                    // Refresh the file list without reloading the page
+                    fetchFileList();
+                } else {
+                    alert('Upload failed!');
+                }
+            })
+            .catch(error => {
+                console.error('Error during file upload:', error);
+                alert('Upload failed!');
+            });
         }
+
+        // Polling function to refresh the file list every 5 seconds
+        function fetchFileList() {
+            fetch('/')
+                .then(response => response.text())
+                .then(html => {
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    const newFileList = doc.querySelector('#fileList');
+                    const fileList = document.getElementById('fileList');
+                    fileList.innerHTML = newFileList.innerHTML;
+                });
+        }
+
+        // Start polling every 5 seconds to check for new files
+        setInterval(fetchFileList, 5000);
     </script>
 </body>
 </html>

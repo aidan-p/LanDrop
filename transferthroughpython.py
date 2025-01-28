@@ -1,6 +1,13 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, send_from_directory, jsonify
+from flask_socketio import SocketIO, emit
 import os
+from infi.systray import SysTrayIcon
+import threading
+import tkinter as tk
+from tkinter import filedialog
+import requests
 
+# Flask and upload setup
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 
@@ -10,18 +17,56 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Get the list of files in the uploads folder
+    files = os.listdir(app.config['UPLOAD_FOLDER'])
+    return render_template('index.html', files=files)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
     file = request.files['file']
+    if file:
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filepath)
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False})
 
-    # Save the file to the upload folder
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    file.save(filepath)
+@app.route('/upload/<filename>')
+def send_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-    # Redirect back to the home page with a success message
-    return redirect(url_for('index', message='File uploaded successfully'))
+# Function to open file explorer
+def open_file_explorer(icon):
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+    filepath = filedialog.askopenfilename()  # Open file dialog
+    if filepath:
+        send_file_to_website(filepath)
+
+# Function to send the file to the local website
+def send_file_to_website(filepath):
+    url = 'http://127.0.0.1:5000/upload'
+    with open(filepath, 'rb') as f:
+        files = {'file': (os.path.basename(filepath), f)}
+        response = requests.post(url, files=files)
+        if response.status_code == 200:
+            print("File uploaded successfully.")
+        else:
+            print("Failed to upload file.")
+
+# Initialize system tray
+def start_tray_icon():
+    menu_options = (("Send File", None, open_file_explorer),)
+    systray = SysTrayIcon("./static/icon.ico", "TransferThroughPython", menu_options)
+    systray.start()
+
+def start_flask():
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    # Run Flask
+    flask_thread = threading.Thread(target=start_flask)
+    flask_thread.daemon = True
+    flask_thread.start()
+
+    start_tray_icon()
