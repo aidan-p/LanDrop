@@ -7,6 +7,15 @@ import tkinter as tk
 from tkinter import filedialog
 import requests
 import ctypes
+import socket
+from waitress import serve
+
+# Get local address
+local_hostname = socket.gethostname()
+ip_addresses = socket.gethostbyname_ex(local_hostname)[2]
+filtered_ips = [ip for ip in ip_addresses if not ip.startswith("127.")]
+first_ip = filtered_ips[:1]
+localip = first_ip[0] + ":5000"
 
 # Hides Python from taskbar
 ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
@@ -60,17 +69,17 @@ def send_file_to_website(filepath):
 
 # Initialize system tray
 def start_tray_icon():
-    menu_options = (("Send File", None, open_file_explorer),)
+    menu_options = ((localip, None, lambda sys_tray_icon: None), ("Send File", None, open_file_explorer),)
     systray = SysTrayIcon("./static/icon.ico", "TransferThroughPython", menu_options)
     systray.start()
 
-def start_flask():
-    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
+def start_local_server():
+    serve(app, host='0.0.0.0', port=5000)
 
 if __name__ == '__main__':
-    # Run Flask
-    flask_thread = threading.Thread(target=start_flask)
-    flask_thread.daemon = True
-    flask_thread.start()
+    # Run server
+    server_thread = threading.Thread(target=start_local_server)
+    server_thread.daemon = True
+    server_thread.start()
 
     start_tray_icon()
