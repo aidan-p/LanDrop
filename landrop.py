@@ -4,22 +4,12 @@ import threading
 import os
 import ctypes
 from waitress import serve
-from utils import get_ip, open_file_explorer, wifi_alert
+from utils import get_ip, open_file_explorer, open_help
 import constants
 import configparser
 
 # Hides Python from taskbar
 ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
-
-# Check for wifi_alert
-config = configparser.ConfigParser()
-config.read('preferences.ini')
-if config.has_section('Settings') and config.has_option('Settings', 'WiFiAlert'):
-    wifi_alert = config.get('Settings', 'WiFiAlert')
-    if wifi_alert == 'yes':
-        wifi_alert()
-else:
-    wifi_alert()
 
 # Get local ip
 localip = get_ip(constants.portNum)
@@ -53,7 +43,7 @@ def send_file(filename):
 
 # Initialize system tray
 def start_tray_icon():
-    menu_options = ((localip, None, lambda sys_tray_icon: None), ("Send File", None, open_file_explorer),)
+    menu_options = ((localip, None, lambda sys_tray_icon: None), ("Help", None, open_help), ("Send File", None, open_file_explorer),)
     systray = SysTrayIcon("./static/icon.ico", "LanDrop", menu_options)
     systray.start()
 

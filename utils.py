@@ -7,6 +7,7 @@ import constants
 import os
 import ctypes
 import configparser
+import webbrowser
 
 def get_ip(portNum):
     # Get local address and define port use
@@ -15,27 +16,6 @@ def get_ip(portNum):
     filtered_ips = [ip for ip in ip_addresses if not ip.startswith("127.")]
     first_ip = filtered_ips[:1]
     return first_ip[0] + ":" + portNum
-
-def wifi_alert():
-    result = ctypes.windll.user32.MessageBoxW(0, "Transmitting data through an unsecure WiFi network can allow bad actors to intercept your data. Would you like to proceed?", "ALERT", 0x4 | 0x20)
-    if result == 7:
-        exit()
-    else:
-        result2 = ctypes.windll.user32.MessageBoxW(0, "Would you like to disable this alert?", "ALERT", 0x4 | 0x20)
-        if result2 == 6:
-            config = configparser.ConfigParser()
-            config.read('preferences.ini')
-
-            # Check if the section exists, otherwise create it
-            if not config.has_section('Settings'):
-                config.add_section('Settings')
-
-            # Write "WiFiAlert = no" to the section
-            config.set('Settings', 'WiFiAlert', 'no')
-
-            # Save the file
-            with open('preferences.ini', 'w') as configfile:
-                config.write(configfile)
 
 # Function to open file explorer
 def open_file_explorer(icon):
@@ -55,3 +35,6 @@ def send_file_to_website(filepath):
             print("File uploaded successfully.")
         else:
             print("Failed to upload file.")
+
+def open_help(icon):
+    webbrowser.open(f"file://{os.path.abspath("./templates/help.html")}")
