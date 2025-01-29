@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#007BFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Help Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.6;
+            text-indent: 2em;
+        }
+
+        img {
+            display: block;
+            max-width: 50%;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-img {
+            display: inline-block;
+            max-width: 50px;
+            margin-right: 10px;
+            vertical-align: middle;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><img src="images/LanDrop2.png" alt="LanDrop Logo" class="logo-img">LanDrop Help and Documentation</h1>
+
+        <div class="section">
+            <h2>Introduction</h2>
+            <p>Welcome to the help page! Here, you will be able to learn how to setup and get LanDrop running.</p>
+        </div>
+
+        <div class="section">
+            <h2>How to Use</h2>
+            <p>To begin, make sure you have Python and all necessary packages installed. Included in your download should be a list of packages that must be installed through pip.</p>
+            <p>Once installed, simply double click "launch.bat" and you should see the program icon in your tray. To close, right click and select "Quit." To send a file from the host, select "Send File."</p>
+            <img src="images/context.png" alt="Windows context menu">
+            <p>To connect and send files from an external device, note the local IP address at the top of the context menu and type it in a web browser. From there, select the file you would like to upload and press "Upload."</p>
+            <img src="images/page.png" alt="Upload page">
+        </div>
+
+        <div class="section">
+            <h2>Additional Resources</h2>
+            <p>For more information, visit our <a href="https://www.google.com">official documentation</a>.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,2 +1,2 @@
 @echo off
-start /min "" python "transferthroughpython.py"
+start /min "" python "landrop.py"
