@@ -6,7 +6,6 @@ import ctypes
 from waitress import serve
 from utils import get_ip, open_file_explorer, open_help
 import constants
-import configparser
 
 # Hides Python from taskbar
 ctypes.windll.user32.ShowWindow(ctypes.windll.kernel32.GetConsoleWindow(), 0)
