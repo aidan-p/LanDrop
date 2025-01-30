@@ -5,8 +5,6 @@ import socket
 import requests
 import constants
 import os
-import ctypes
-import configparser
 import webbrowser
 
 def get_ip(portNum):
