@@ -2,7 +2,7 @@ import configparser
 import ctypes
 
 def wifi_alert():
-    result = ctypes.windll.user32.MessageBoxW(0, "Transmitting data through an unsecure WiFi network can allow bad actors to intercept your data. Would you like to proceed?", "ALERT", 0x4 | 0x20)
+    result = ctypes.windll.user32.MessageBoxW(0, "Transmitting data through an unsecure WiFi network can allow other individuals to intercept your data. Would you like to proceed?", "ALERT", 0x4 | 0x20)
     if result == 7:
         exit()
     else:
