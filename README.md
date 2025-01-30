@@ -20,3 +20,4 @@
 - Locate program in system tray -> right-click -> take note of ip:port.
 - Go on another device and type ip:port in web browser.
 <p align="center"><img src="https://github.com/user-attachments/assets/ec1ce0e8-9dde-4410-ba04-b80c8f7a9522" width="600" /><br></p>
+<p align="center"><img src="https://github.com/user-attachments/assets/1c0e74e8-37b1-406f-8d5e-e9a19d9b26ec" width="600" /><br></p>
