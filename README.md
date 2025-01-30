@@ -8,6 +8,7 @@
 - Allows phones and tablets to add the local ip:port to homescreen to launch the site in fullscreen.
 
 ## Requirements
+- Windows
 - Python 3.13.1 or higher
 - Required Python packages (install using pip):
   ```bash
