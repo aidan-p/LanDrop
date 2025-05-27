@@ -12,7 +12,7 @@
 - Python 3.13.1 or higher
 - Required Python packages (install using pip):
   ```bash
-  pip install flask flask-socketio waitress requests infi.systray configparser
+  pip install flask flask-socketio waitress requests infi.systray
   
 ## Getting Started
 - Download and install Python and all required packages.
